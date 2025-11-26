@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ProjectSelectionView: View {
     @EnvironmentObject var accessService: ProjectAccessService
+    @EnvironmentObject var appState: AppState  // Добавляем AppState
     @State private var selectedProject: ProjectContainer?
     
     var body: some View {
@@ -13,7 +14,7 @@ struct ProjectSelectionView: View {
                 // Список доступных проектов
                 ScrollView {
                     LazyVStack(spacing: 12) {
-                        ForEach(accessService.getUserProjects()) { project in
+                        ForEach(accessService.availableProjects) { project in  // Исправлено: используем свойство вместо метода
                             ProjectCardView(project: project, isSelected: selectedProject?.id == project.id)
                                 .onTapGesture {
                                     selectedProject = project
@@ -25,7 +26,7 @@ struct ProjectSelectionView: View {
                 
                 // Кнопка перехода к выбранному проекту
                 if let project = selectedProject {
-                    NavigationLink(destination: RoleBasedProjectView(project: project)) {  // ЗАМЕНИЛИ ProjectWorkspaceView на RoleBasedProjectView
+                    NavigationLink(destination: RoleBasedProjectView(project: project)) {
                         Text("Перейти к проекту: \(project.name)")
                             .font(.headline)
                             .foregroundColor(.white)
@@ -41,7 +42,10 @@ struct ProjectSelectionView: View {
             }
             .navigationTitle("Мои проекты")
             .onAppear {
-                accessService.loadSampleData()
+                // Исправлено: передаем роль и пользователя из AppState
+                if let user = appState.currentUser {
+                    accessService.loadSampleData(for: appState.currentUserRole, user: user)
+                }
             }
         }
     }

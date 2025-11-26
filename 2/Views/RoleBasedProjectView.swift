@@ -2,16 +2,14 @@ import SwiftUI
 
 struct RoleBasedProjectView: View {
     let project: ProjectContainer
-    @EnvironmentObject var accessService: ProjectAccessService
+    @EnvironmentObject var appState: AppState
     @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
         VStack {
-            // Динамический заголовок проекта
             ProjectHeaderView(project: project)
             
-            // Разный контент в зависимости от роли
-            switch accessService.currentUserRole {
+            switch appState.currentUserRole {
             case .admin:
                 AdminProjectView(project: project)
             case .foreman:
@@ -318,7 +316,7 @@ struct TabButton: View {
     }
 }
 
-// MARK: - Заглушки для вьюшек (будем наполнять)
+// MARK: - Заглушки для вьюшек
 struct AdminDashboardView: View {
     let project: ProjectContainer
     var body: some View {
@@ -327,7 +325,6 @@ struct AdminDashboardView: View {
                 Text("Панель администратора")
                     .font(.title3)
                     .bold()
-                // Здесь будет дашборд с метриками проекта
             }
             .padding()
         }

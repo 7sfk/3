@@ -1,6 +1,6 @@
 import Foundation
 
-enum ProjectStatus: String, Codable, CaseIterable {
+enum ContainerProjectStatus: String, Codable, CaseIterable {
     case planning = "planning"
     case inProgress = "in_progress"
     case onHold = "on_hold"
@@ -16,7 +16,7 @@ struct ProjectContainer: Identifiable, Codable {
     let createdBy: String
     var assignedUsers: [String]
     var foremanId: String
-    var status: ProjectStatus
+    var status: ContainerProjectStatus
     var description: String
     var budget: Double
     var timeline: ProjectTimeline

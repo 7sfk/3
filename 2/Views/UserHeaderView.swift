@@ -1,17 +1,17 @@
 import SwiftUI
 
 struct UserHeaderView: View {
-    @EnvironmentObject var accessService: ProjectAccessService
+    @EnvironmentObject var appState: AppState  // Используем AppState вместо ProjectAccessService
     
     var body: some View {
         VStack(alignment: .leading) {
-            if let user = accessService.currentUser {
+            if let user = appState.currentUser {  // Берем пользователя из AppState
                 HStack {
                     VStack(alignment: .leading) {
                         Text("Добро пожаловать, \(user)")
                             .font(.title2)
                             .bold()
-                        Text("\(accessService.currentUserRole.displayName)")
+                        Text("\(appState.currentUserRole.displayName)")  // Берем роль из AppState
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                     }

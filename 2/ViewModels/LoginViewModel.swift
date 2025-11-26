@@ -9,9 +9,11 @@ final class LoginViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     
     private let appState: AppState
+    private let projectAccessService: ProjectAccessService
     
-    init(appState: AppState) {
+    init(appState: AppState, projectAccessService: ProjectAccessService) {
         self.appState = appState
+        self.projectAccessService = projectAccessService
     }
     
     func login() {
@@ -30,12 +32,19 @@ final class LoginViewModel: ObservableObject {
             return
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+        // Имитация процесса входа
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             self.isLoading = false
             
             if self.password.count >= 3 {
+                // Успешный вход
                 self.appState.currentUser = self.username
                 self.appState.currentUserRole = self.selectedRole
+                
+                // Загружаем данные для выбранной роли
+                self.projectAccessService.loadSampleData(for: self.selectedRole, user: self.username)
+                
+                print("Успешный вход: \(self.username) как \(self.selectedRole.displayName)")
             } else {
                 self.errorMessage = "Неверные учетные данные"
             }

@@ -10,13 +10,10 @@ final class ProjectViewModel: ObservableObject {
     
     init() {
         self.project = Project(
-            id: "1",
             name: "ЖК Комфорт",
             description: "Многоэтажный жилой комплекс",
-            startDate: Date(),
-            endDate: Calendar.current.date(byAdding: .month, value: 6, to: Date())!,
-            budget: 50000000,
-            status: .inProgress
+            status: .active, // Изменили с .inProgress на .active
+            progress: 35
         )
         self.metrics = ProjectMetrics(
             completionPercentage: 35,
