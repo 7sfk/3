@@ -1,35 +1,13 @@
 import SwiftUI
+import Combine
 
-struct PurchaseItem: Identifiable {
-    var id: String
-    var title: String
-    var assignedTo: String
-}
-
-class PurchasesViewModel: ObservableObject {
-    @Published var purchases: [PurchaseItem] = []
+final class PurchasesViewModel: ObservableObject {
+    @Published var purchases: [Purchase] = []
 
     init() {
         purchases = [
-            PurchaseItem(id: "1", title: "Закупить материалы", assignedTo: "Иван"),
-            PurchaseItem(id: "2", title: "Проверка склада", assignedTo: "Алексей")
+            Purchase(id: "1", item: "Бетон", quantity: 10, assignedTo: "3"),
+            Purchase(id: "2", item: "Песок", quantity: 20, assignedTo: "4")
         ]
-    }
-}
-
-struct PurchasesView: View {
-    @ObservedObject var viewModel: PurchasesViewModel
-
-    var body: some View {
-        List(viewModel.purchases) { purchase in
-            VStack(alignment: .leading) {
-                Text(purchase.title)
-                    .font(.headline)
-                Text("Ответственный: \(purchase.assignedTo)")
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
-            }
-        }
-        .navigationTitle("Покупки")
     }
 }

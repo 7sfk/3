@@ -1,27 +1,57 @@
-import Foundation
 import SwiftUI
 import Combine
 
-class CameraViewModel: ObservableObject {
-    @Published var capturedImage: UIImage? = nil
-    @Published var uploadStatus: String = ""
-
-    func captureImage() {
-        capturedImage = UIImage(systemName: "camera.fill")
-        uploadStatus = "Изображение захвачено"
+final class CameraViewModel: ObservableObject {
+    @Published var capturedImage: UIImage?
+    @Published var isUploading = false
+    @Published var uploadProgress: Double = 0.0
+    @Published var uploadError: String?
+    
+    func captureImage(_ image: UIImage) {
+        capturedImage = image
     }
-
+    
     func uploadImage() {
         guard let image = capturedImage,
               let imageData = image.jpegData(compressionQuality: 0.8) else {
-            uploadStatus = "Нет изображения для загрузки"
+            uploadError = "Не удалось подготовить изображение для загрузки"
             return
         }
-
-        UploadService.shared.upload(fileData: imageData) { success in
+        
+        isUploading = true
+        uploadProgress = 0.0
+        uploadError = nil
+        
+        // Используем правильный метод uploadImage из UploadService
+        UploadService.shared.uploadImage(imageData) { [weak self] url in
             DispatchQueue.main.async {
-                self.uploadStatus = success ? "Загрузка успешна" : "Ошибка загрузки"
+                self?.isUploading = false
+                
+                if let url = url {
+                    self?.uploadProgress = 1.0
+                    print("Изображение успешно загружено: \(url)")
+                } else {
+                    self?.uploadError = "Ошибка загрузки изображения"
+                }
             }
         }
+        
+        // Имитация прогресса загрузки
+        simulateUploadProgress()
+    }
+    
+    private func simulateUploadProgress() {
+        // Имитация прогресса загрузки для демонстрации
+        for i in 1...10 {
+            DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.3) { [weak self] in
+                self?.uploadProgress = Double(i) * 0.1
+            }
+        }
+    }
+    
+    func clearImage() {
+        capturedImage = nil
+        uploadError = nil
+        uploadProgress = 0.0
     }
 }

@@ -1,10 +1,11 @@
 import Foundation
 
 struct Project: Identifiable, Codable {
-    let id: UUID
+    let id: String
     var name: String
-    var status: String
+    var description: String
     var startDate: Date
-    var endDate: Date?
+    var endDate: Date
+    var budget: Double
+    var status: ProjectStatus  // Используем ProjectStatus из ProjectContainer.swift
 }
-

@@ -1,21 +1,10 @@
-import Foundation
+import SwiftUI
 import Combine
 
-struct TaskItem: Identifiable {
-    let id = UUID()
-    let title: String
-    let isDone: Bool
-}
-
 final class TasksViewModel: ObservableObject {
-    @Published var tasks: [TaskItem] = [
-        TaskItem(title: "Проверить материалы", isDone: false),
-        TaskItem(title: "Согласовать чертежи", isDone: true)
+    @Published var tasks: [Task] = [
+        Task(id: "1", title: "Подготовить площадку", completed: false, assignedTo: "1"),
+        Task(id: "2", title: "Закупить материалы", completed: true, assignedTo: "2"),
+        Task(id: "3", title: "Составить отчет", completed: false, assignedTo: "3")
     ]
-
-    func toggleTask(_ task: TaskItem) {
-        if let idx = tasks.firstIndex(where: { $0.id == task.id }) {
-            tasks[idx] = TaskItem(title: task.title, isDone: !task.isDone)
-        }
-    }
 }

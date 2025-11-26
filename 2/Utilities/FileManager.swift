@@ -1,26 +1,27 @@
 import Foundation
-import UIKit
 
-class FileManagerUtil {
+class AppFileManager {
+    static let shared = AppFileManager()
     
-    static func saveImage(_ image: UIImage, to path: String) -> Bool {
-        guard let data = image.pngData() else { return false }
+    private init() {}
+    
+    func saveImage(_ imageData: Data, name: String) -> URL? {
+        let documents = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let fileURL = documents.appendingPathComponent("\(name).jpg")
+        
         do {
-            let url = URL(fileURLWithPath: path)
-            try data.write(to: url)
-            return true
+            try imageData.write(to: fileURL)
+            return fileURL
         } catch {
-            print("Ошибка сохранения файла: \(error)")
-            return false
+            print("Error saving image: \(error)")
+            return nil
         }
     }
     
-    static func fileExists(at path: String) -> Bool {
-        return FileManager.default.fileExists(atPath: path)
-    }
-    
-    static func loadFile(at path: String) -> Data? {
-        return FileManager.default.contents(atPath: path)
+    func loadImage(name: String) -> Data? {
+        let documents = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let fileURL = documents.appendingPathComponent("\(name).jpg")
+        
+        return try? Data(contentsOf: fileURL)
     }
 }
-
