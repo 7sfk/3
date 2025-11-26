@@ -1,9 +1,4 @@
 import SwiftUI
-import Foundation
-
-enum EmployeeRole: String, Codable {
-    case admin, foreman, worker
-}
 
 struct StatusBarView: View {
     @Binding var currentUserRole: EmployeeRole
@@ -22,9 +17,16 @@ struct StatusBarView: View {
 
     private func roleColor(role: EmployeeRole) -> Color {
         switch role {
-        case .admin: return .red
-        case .foreman: return .blue
-        case .worker: return .green
+        case .manager:
+            return .red
+        case .supervisor:
+            return .orange
+        case .engineer:
+            return .blue
+        case .architect:
+            return .purple
+        case .worker:
+            return .green
         }
     }
 }

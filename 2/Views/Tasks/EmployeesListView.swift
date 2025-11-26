@@ -22,5 +22,8 @@ struct EmployeesListView: View {
             }
         }
         .navigationTitle("Сотрудники")
+        .onAppear {
+            viewModel.loadSampleData()
+        }
     }
 }
