@@ -1,3 +1,4 @@
+
 import SwiftUI
 
 // Helper View to correctly initialize LoginViewModel
@@ -56,6 +57,13 @@ struct ContentView: View {
         .animation(.easeInOut, value: appState.currentUser)
         .animation(.easeInOut, value: showWelcome)
         .animation(.easeInOut, value: showMainApp)
+        .alert(isPresented: $appState.notificationService.showAlert) { // Here is the change
+            Alert(
+                title: Text("Notification"),
+                message: Text(appState.notificationService.alertMessage ?? "An unknown error occurred."),
+                dismissButton: .default(Text("OK"))
+            )
+        }
     }
 }
 

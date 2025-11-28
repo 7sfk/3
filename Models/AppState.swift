@@ -1,3 +1,4 @@
+
 import SwiftUI
 import Combine
 
@@ -5,10 +6,14 @@ final class AppState: ObservableObject {
     @Published var currentUser: String?
     @Published var currentUserRole: UserRole = .worker
     
+    let notificationService = NotificationService()
+    
     init() {
         // Для тестирования можно установить тестового пользователя
         // self.currentUser = "test_user"
         // self.currentUserRole = .admin
+        self.currentUser = "test_user"
+        self.currentUserRole = .admin
     }
     
     func logout() {
