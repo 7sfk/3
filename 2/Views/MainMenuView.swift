@@ -3,6 +3,7 @@ import SwiftUI
 struct MainMenuView: View {
     @EnvironmentObject var appState: AppState
     @EnvironmentObject var projectAccessService: ProjectAccessService
+    @StateObject private var timeService = TimeTrackingService()
     
     var body: some View {
         NavigationView {
@@ -33,7 +34,7 @@ struct MainMenuView: View {
                             )
                         }
                         
-                        NavigationLink(destination: TimeTrackingView()) {
+                        NavigationLink(destination: TimeTrackingView(timeService: timeService)) {
                             MenuCard(
                                 icon: "stopwatch.fill",
                                 title: "Учет времени",

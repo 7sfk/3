@@ -57,7 +57,7 @@ struct LoadingView: View {
                 .tint(roleColor)
             
             VStack(spacing: 8) {
-                Text("Загружаем проекты")
+                Text("ИЗМЕНЕНИЯ ПРИМЕНЕНЫ! ПРАВИЛЬНАЯ ПАПКА!")
                     .font(.headline)
                     .foregroundColor(.secondary)
                 
