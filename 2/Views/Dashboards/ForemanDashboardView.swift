@@ -1,41 +1,5 @@
 import SwiftUI
 
-// MARK: - ViewModel
-class ForemanDashboardViewModel: ObservableObject {
-    @Published var project: ProjectContainer
-    @Published var tasks: [ProjectTask] = []
-    @Published var team: [Employee] = []
-    @Published var isLoading = false
-    
-    private let firebaseService = FirebaseService.shared
-    
-    init(project: ProjectContainer) {
-        self.project = project
-    }
-    
-    func fetchAllData() {
-        isLoading = true
-        let projectId = project.id
-        
-        let group = DispatchGroup()
-        
-        group.enter()
-        firebaseService.fetchAllTasks(for: projectId) { [weak self] tasks in
-            self?.tasks = tasks
-            group.leave()
-        }
-        
-        group.enter()
-        firebaseService.fetchTeam(for: projectId) { [weak self] team in
-            self?.team = team
-            group.leave()
-        }
-        
-        group.notify(queue: .main) {
-            self.isLoading = false
-        }
-    }
-}
 
 // MARK: - Main View
 struct ForemanDashboardView: View {

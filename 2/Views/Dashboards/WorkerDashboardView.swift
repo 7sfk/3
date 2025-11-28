@@ -1,21 +1,5 @@
 import SwiftUI
 
-class WorkerDashboardViewModel: ObservableObject {
-    @Published var tasks: [ProjectTask] = []
-    @Published var isLoading = false
-    
-    private let firebaseService = FirebaseService.shared
-    
-    func fetchTasks(for userId: String, projectId: String) {
-        isLoading = true
-        firebaseService.fetchTasks(for: userId, projectId: projectId) { [weak self] tasks in
-            DispatchQueue.main.async {
-                self?.tasks = tasks
-                self?.isLoading = false
-            }
-        }
-    }
-}
 
 struct WorkerDashboardView: View {
     @StateObject private var viewModel = WorkerDashboardViewModel()
