@@ -60,9 +60,9 @@ class TimeTrackingService: ObservableObject {
     
     func loadSampleData() {
         let sampleTasks = [
-            WorkTask(name: "Планирование проекта", description: "Создание плана работ", status: .completed, materials: []),
+            WorkTask(name: "Планирование проекта", description: "Создание плана работ", status: .done, materials: []),
             WorkTask(name: "Закупка материалов", description: "Заказ необходимых материалов", status: .inProgress, materials: []),
-            WorkTask(name: "Монтаж конструкций", description: "Установка основных конструкций", status: .pending, materials: [])
+            WorkTask(name: "Монтаж конструкций", description: "Установка основных конструкций", status: .todo, materials: [])
         ]
         
         let sampleTimeSheet = TimeSheet(
