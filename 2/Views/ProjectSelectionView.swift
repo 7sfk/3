@@ -2,29 +2,35 @@ import SwiftUI
 
 struct ProjectSelectionView: View {
     @EnvironmentObject var accessService: ProjectAccessService
-    @EnvironmentObject var appState: AppState  // Добавляем AppState
+    @EnvironmentObject var appState: AppState
     @State private var selectedProject: ProjectContainer?
-    
+
     var body: some View {
         NavigationView {
             VStack {
-                // Шапка с информацией о пользователе
                 UserHeaderView()
-                
-                // Список доступных проектов
-                ScrollView {
-                    LazyVStack(spacing: 12) {
-                        ForEach(accessService.availableProjects) { project in  // Исправлено: используем свойство вместо метода
-                            ProjectCardView(project: project, isSelected: selectedProject?.id == project.id)
-                                .onTapGesture {
-                                    selectedProject = project
-                                }
+
+                if accessService.isLoading {
+                    ProgressView("Загрузка проектов...")
+                    Spacer()
+                } else if accessService.availableProjects.isEmpty {
+                    Text("Проекты не найдены.")
+                        .foregroundColor(.secondary)
+                    Spacer()
+                } else {
+                    ScrollView {
+                        LazyVStack(spacing: 12) {
+                            ForEach(accessService.availableProjects) { project in
+                                ProjectCardView(project: project, isSelected: selectedProject?.id == project.id)
+                                    .onTapGesture {
+                                        selectedProject = project
+                                    }
+                            }
                         }
+                        .padding()
                     }
-                    .padding()
                 }
-                
-                // Кнопка перехода к выбранному проекту
+
                 if let project = selectedProject {
                     NavigationLink(destination: RoleBasedProjectView(project: project)) {
                         Text("Перейти к проекту: \(project.name)")
@@ -42,9 +48,8 @@ struct ProjectSelectionView: View {
             }
             .navigationTitle("Мои проекты")
             .onAppear {
-                // Исправлено: передаем роль и пользователя из AppState
                 if let user = appState.currentUser {
-                    accessService.loadSampleData(for: appState.currentUserRole, user: user)
+                    accessService.fetchProjects(forUser: user, role: appState.currentUserRole)
                 }
             }
         }
@@ -67,7 +72,6 @@ struct ProjectCardView: View {
                 }
                 Spacer()
                 
-                // Статус проекта
                 Text(project.status.rawValue)
                     .font(.caption)
                     .padding(.horizontal, 8)
