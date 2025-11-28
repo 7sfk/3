@@ -1,12 +1,14 @@
 import Foundation
 import Combine
 
-final class EmployeeViewModel: ObservableObject {
-    @Published var name: String = ""
-    @Published var role: EmployeeRole = .worker
+class EmployeeViewModel: ObservableObject {
+    @Published var employees: [Employee] = []
 
-    func saveEmployee() {
-        // Здесь будет логика сохранения нового сотрудника
-        print("Save employee:", name, role.rawValue)
+    func fetchEmployees() {
+        // Логика для получения сотрудников
+    }
+
+    func addEmployee(_ employee: Employee) {
+        employees.append(employee)
     }
 }

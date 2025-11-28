@@ -1,24 +1,23 @@
 import Foundation
 import Combine
 
-final class ForemanDashboardViewModel: ObservableObject {
+class ForemanDashboardViewModel: ObservableObject {
     @Published var project: ProjectContainer
-    @Published var assignedEmployees: [Employee] = []
+    @Published var tasks: [ProjectTask] = []
+    @Published var team: [Employee] = []
     @Published var isLoading: Bool = false
-    
-    private let firebaseService = FirebaseService.shared
-    
+
     init(project: ProjectContainer) {
         self.project = project
     }
-    
-    func fetchAssignedEmployees() {
+
+    func fetchAllData() {
         isLoading = true
-        firebaseService.fetchTeam(for: project.id) { [weak self] employees in
-            DispatchQueue.main.async {
-                self?.assignedEmployees = employees
-                self?.isLoading = false
-            }
+        // Здесь должна быть логика для загрузки данных
+        // (задачи, команда и т.д.)
+        // Для примера я просто выключу isLoading через 2 секунды
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            self.isLoading = false
         }
     }
 }

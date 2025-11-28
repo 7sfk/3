@@ -1,22 +1,19 @@
 import SwiftUI
 
 struct RoleBasedProjectView: View {
-    @EnvironmentObject var appState: AppState
+    let userRole: Role
     let project: ProjectContainer
-
+    
     var body: some View {
-        VStack {
-            switch appState.currentUserRole {
-            case .worker, .supplier:
-                WorkerDashboardView(project: project)
-            case .foreman:
-                ForemanDashboardView(project: project)
-            case .admin:
-                AdminDashboardView()
-            case .inspector:
-                InspectorDashboardView(project: project)
-            }
+        switch userRole {
+        case .inspector:
+            InspectorDashboardView()
+        case .foreman:
+            ForemanDashboardView(project: project)
+        default:
+            // Можно добавить дашборды для других ролей
+            // или заглушку
+            Text("Дашборд для вашей роли в разработке")
         }
-        .navigationTitle(project.name)
     }
 }

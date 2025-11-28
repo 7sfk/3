@@ -1,82 +1,31 @@
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var appState: AppState
+    @StateObject private var appState = AppState()
     @StateObject private var projectAccessService = ProjectAccessService()
-    @State private var showWelcome = false
-    @State private var showMainApp = false
 
     var body: some View {
         Group {
-            if let currentUser = appState.currentUser {
-                if showWelcome && !showMainApp {
-                    WelcomeView(
-                        user: currentUser,
-                        role: appState.currentUserRole,
-                        onContinue: {
-                            withAnimation(.easeInOut) {
-                                showMainApp = true
-                                // Загружаем данные после приветствия
-                                projectAccessService.loadSampleData(for: appState.currentUserRole, user: currentUser)
-                            }
-                        }
-                    )
-                } else if showMainApp {
-                    if projectAccessService.availableProjects.isEmpty {
-                        LoadingView(user: currentUser, role: appState.currentUserRole)
-                    } else {
-                        EnhancedProjectSelectionView()
-                            .environmentObject(projectAccessService)
-                    }
-                } else {
-                    Color.clear.onAppear {
-                        withAnimation(.easeInOut) {
-                            showWelcome = true
-                        }
-                    }
-                }
+            if appState.isLoggedIn, let userRole = appState.userRole, let project = appState.currentProject {
+                RoleBasedProjectView(userRole: userRole, project: project)
             } else {
-                LoginView(viewModel: LoginViewModel(appState: appState, projectAccessService: projectAccessService))
+                LoginView()
             }
         }
-        .animation(.easeInOut, value: appState.currentUser)
-        .animation(.easeInOut, value: showWelcome)
-        .animation(.easeInOut, value: showMainApp)
+        .environmentObject(appState)
+        .environmentObject(projectAccessService)
+        .onAppear {
+            // Для демонстрации можно загрузить тестовые данные
+            // чтобы сразу видеть проекты без входа в систему.
+            #if DEBUG
+            projectAccessService.loadSampleData() 
+            #endif
+        }
     }
 }
 
-struct LoadingView: View {
-    let user: String
-    let role: UserRole
-    
-    var body: some View {
-        VStack(spacing: 20) {
-            ProgressView()
-                .scaleEffect(1.5)
-                .padding()
-                .tint(roleColor)
-            
-            VStack(spacing: 8) {
-                Text("ИЗМЕНЕНИЯ ПРИМЕНЕНЫ! ПРАВИЛЬНАЯ ПАПКА!")
-                    .font(.headline)
-                    .foregroundColor(.secondary)
-                
-                Text("для \(role.displayName)")
-                    .font(.subheadline)
-                    .foregroundColor(roleColor)
-            }
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(.systemBackground))
-    }
-    
-    private var roleColor: Color {
-        switch role {
-        case .admin: return .red
-        case .foreman: return .orange
-        case .supplier: return .blue
-        case .worker: return .green
-        case .inspector: return .purple
-        }
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
     }
 }

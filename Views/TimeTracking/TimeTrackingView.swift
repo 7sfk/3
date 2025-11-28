@@ -2,7 +2,9 @@ import SwiftUI
 import Combine
 
 struct TimeTrackingView: View {
-    @StateObject private var timeService = TimeTrackingService()
+    @EnvironmentObject var appState: AppState
+    @StateObject var timeService: TimeTrackingService
+
     @State private var newTaskName = ""
     @State private var selectedProject = "Текущий проект"
     @State private var showAddTask = false
@@ -84,9 +86,10 @@ struct TimeTrackingView: View {
         HStack(spacing: 15) {
             if timeService.currentSession == nil {
                 Button(action: {
+                    guard let userId = appState.currentUser else { return }
                     timeService.startWorkDay(
-                        employeeId: "user_123",
-                        userId: "current_user",
+                        employeeId: userId, // Используем реальный ID
+                        userId: userId,     // Используем реальный ID
                         projectId: selectedProject
                     )
                 }) {
@@ -274,7 +277,7 @@ struct TimeTrackingView: View {
     }
     
     private var completedTasksCount: Int {
-        timeService.currentSession?.tasks.filter { $0.status == .completed }.count ?? 0
+        timeService.currentSession?.tasks.filter { $0.status == WorkActivityStatus.completed }.count ?? 0
     }
     
     private var totalHoursToday: Double {
@@ -283,16 +286,23 @@ struct TimeTrackingView: View {
             .reduce(0.0) { $0 + ($1.totalHours ) }
     }
     
-    private func statusColor(for status: TaskStatus) -> Color {
+    private func statusColor(for status: WorkActivityStatus) -> Color {
         switch status {
-        case .pending: return .orange
-        case .inProgress: return .blue
-        case .finishing: return .purple
-        case .completed: return .green
+        case .new:
+            return .gray
+        case .inProgress:
+            return .blue
+        case .completed:
+            return .green
+        case .pending:
+            return .orange
+        case .urgent:
+            return .red
         }
     }
 }
 
 #Preview {
-    TimeTrackingView()
+    TimeTrackingView(timeService: TimeTrackingService())
+        .environmentObject(AppState())
 }

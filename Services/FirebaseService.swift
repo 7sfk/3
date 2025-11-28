@@ -64,10 +64,10 @@ class FirebaseService {
     ]
     
     private var sampleTasks: [ProjectTask] = [
-        ProjectTask(id: "t1", name: "Установка окон", description: "Установить окна на 1-5 этажах", assignedTo: "worker1", projectId: "1", isCompleted: false, dueDate: Date().addingTimeInterval(86400 * 5), remarks: ["Некоторые рамы поцарапаны."]),
+        ProjectTask(id: "t1", name: "Установка окон", description: "Установить окна на 1-5 этажах", assignedTo: "worker1", projectId: "1", isCompleted: false, dueDate: Date().addingTimeInterval(86400 * 5)),
         ProjectTask(id: "t2", name: "Кладка кирпича", description: "Внешние стены, секция А", assignedTo: "worker1", projectId: "1", isCompleted: true, dueDate: Date().addingTimeInterval(86400 * 2)),
         ProjectTask(id: "t3", name: "Прокладка кабеля", description: "Электрические кабели, 2 этаж", assignedTo: "worker2", projectId: "1", isCompleted: false, dueDate: Date().addingTimeInterval(86400 * 3)),
-        ProjectTask(id: "t4", name: "Внутренняя отделка", description: "Шпаклевка стен в холле", assignedTo: "worker2", projectId: "1", isCompleted: false, dueDate: Date().addingTimeInterval(86400 * 10), remarks: ["Неровное нанесение, требуется переделать.", "Забыли укрыть мебель."]),
+        ProjectTask(id: "t4", name: "Внутренняя отделка", description: "Шпаклевка стен в холле", assignedTo: "worker2", projectId: "1", isCompleted: false, dueDate: Date().addingTimeInterval(86400 * 10)),
         ProjectTask(id: "t5", name: "Земляные работы", description: "Рытье котлована под фундамент", assignedTo: "worker3", projectId: "2", isCompleted: false, dueDate: Date().addingTimeInterval(86400 * 7)),
         ProjectTask(id: "t6", name: "Закупка арматуры", description: "Закупить 10 тонн арматуры класса А500", assignedTo: "supplier1", projectId: "2", isCompleted: false, dueDate: Date().addingTimeInterval(86400 * 4))
     ]
@@ -140,17 +140,6 @@ class FirebaseService {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
             let tasks = self.sampleTasks.filter { $0.projectId == projectId }
             completion(tasks)
-        }
-    }
-    
-    func addRemark(to taskId: String, remark: String, completion: @escaping (Bool) -> Void) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
-            if let index = self.sampleTasks.firstIndex(where: { $0.id == taskId }) {
-                self.sampleTasks[index].remarks.append(remark)
-                completion(true)
-            } else {
-                completion(false)
-            }
         }
     }
     

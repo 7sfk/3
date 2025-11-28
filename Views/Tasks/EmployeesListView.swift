@@ -1,29 +1,37 @@
 import SwiftUI
 
 struct EmployeesListView: View {
-    @StateObject private var viewModel = EmployeesListViewModel()
+    @EnvironmentObject var viewModel: EmployeeViewModel
+    @State private var showingAddEmployee = false
 
     var body: some View {
-        VStack {
-            TextField("Поиск сотрудника...", text: $viewModel.searchText)
-                .textFieldStyle(.roundedBorder)
-                .padding()
-
-            List(viewModel.filteredEmployees) { employee in
-                HStack {
+        NavigationView {
+            List {
+                ForEach(viewModel.employees) { employee in
                     VStack(alignment: .leading) {
                         Text(employee.name)
                             .font(.headline)
-                        Text(employee.role.rawValue.capitalized)
+                        Text(employee.role.displayName)
                             .font(.subheadline)
-                            .foregroundColor(.gray)
+                            .foregroundColor(.secondary)
                     }
                 }
             }
+            .navigationTitle("Сотрудники")
+            .navigationBarItems(trailing: Button(action: { showingAddEmployee = true }) {
+                Image(systemName: "plus")
+            })
+            .sheet(isPresented: $showingAddEmployee) {
+                AddEmployeeView()
+                    .environmentObject(viewModel)
+            }
         }
-        .navigationTitle("Сотрудники")
-        .onAppear {
-            viewModel.loadSampleData()
-        }
+    }
+}
+
+struct EmployeesListView_Previews: PreviewProvider {
+    static var previews: some View {
+        EmployeesListView()
+            .environmentObject(EmployeeViewModel())
     }
 }

@@ -1,11 +1,11 @@
 import SwiftUI
 
-
 struct WorkerDashboardView: View {
-    @StateObject private var viewModel = WorkerDashboardViewModel()
-    @EnvironmentObject var appState: AppState
+    @StateObject private var viewModel: WorkerDashboardViewModel
     
-    let project: ProjectContainer
+    init(project: ProjectContainer, userId: String) {
+        _viewModel = StateObject(wrappedValue: WorkerDashboardViewModel(project: project, userId: userId))
+    }
     
     var body: some View {
         VStack {
@@ -18,9 +18,7 @@ struct WorkerDashboardView: View {
             }
         }
         .onAppear {
-            if let userId = appState.currentUser {
-                viewModel.fetchTasks(for: userId, projectId: project.id)
-            }
+            viewModel.fetchTasks()
         }
         .navigationTitle("Мои задачи")
     }
