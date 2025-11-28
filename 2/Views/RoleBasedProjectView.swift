@@ -8,7 +8,9 @@ struct RoleBasedProjectView: View {
         VStack {
             switch appState.currentUserRole {
             case .worker, .supplier:
-                WorkerDashboardView(project: project)
+                if let userId = appState.currentUser {
+                    WorkerDashboardView(project: project, userId: userId)
+                }
             case .foreman:
                 ForemanDashboardView(project: project)
             case .admin:

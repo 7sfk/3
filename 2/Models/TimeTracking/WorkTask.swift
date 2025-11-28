@@ -1,7 +1,7 @@
 import Foundation
 
-// Объявление перечисления TaskStatus ПЕРЕД его использованием
-enum TaskStatus: String, Codable, CaseIterable {
+// Объявление перечисления WorkActivityStatus ПЕРЕД его использованием
+enum WorkActivityStatus: String, Codable, CaseIterable {
     case new = "Новая"
     case inProgress = "В работе"
     case completed = "Завершена"
@@ -13,6 +13,6 @@ struct WorkTask: Identifiable, Codable {
     var id = UUID()
     var name: String
     var description: String?
-    var status: TaskStatus
+    var status: WorkActivityStatus
     var materials: [MaterialUsage]?
 }

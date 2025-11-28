@@ -20,8 +20,8 @@ final class EmployeesListViewModel: ObservableObject {
     func loadSampleData() {
         employees = [
             Employee(id: "1", name: "Иван Петров", role: .worker, email: "ivan@example.com", phone: "+79991234567"),
-            Employee(id: "2", name: "Мария Сидорова", role: .manager, email: "maria@example.com", phone: "+79991234568"),
-            Employee(id: "3", name: "Алексей Козлов", role: .engineer, email: "alex@example.com", phone: "+79991234569")
+            Employee(id: "2", name: "Мария Сидорова", role: .worker, email: "maria@example.com", phone: "+79991234568"),
+            Employee(id: "3", name: "Алексей Козлов", role: .worker, email: "alex@example.com", phone: "+79991234569")
         ]
     }
 }

@@ -1,12 +1,12 @@
 import SwiftUI
 
 struct StatusBarView: View {
-    @Binding var currentUserRole: EmployeeRole
+    @Binding var currentUserRole: UserRole
 
     var body: some View {
         HStack {
             Text("Текущая роль:")
-            Text(currentUserRole.rawValue.capitalized)
+            Text(currentUserRole.displayName)
                 .foregroundColor(roleColor(role: currentUserRole))
                 .bold()
         }
@@ -15,18 +15,18 @@ struct StatusBarView: View {
         .cornerRadius(10)
     }
 
-    private func roleColor(role: EmployeeRole) -> Color {
+    private func roleColor(role: UserRole) -> Color {
         switch role {
-        case .manager:
+        case .admin:
             return .red
-        case .supervisor:
+        case .foreman:
             return .orange
-        case .engineer:
+        case .supplier:
             return .blue
-        case .architect:
-            return .purple
         case .worker:
             return .green
+        case .inspector:
+            return .purple
         }
     }
 }

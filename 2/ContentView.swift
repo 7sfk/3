@@ -1,5 +1,18 @@
 import SwiftUI
 
+// Helper View to correctly initialize LoginViewModel
+struct LoginViewHolder: View {
+    @StateObject private var viewModel: LoginViewModel
+
+    init(appState: AppState, projectAccessService: ProjectAccessService) {
+        _viewModel = StateObject(wrappedValue: LoginViewModel(appState: appState, projectAccessService: projectAccessService))
+    }
+
+    var body: some View {
+        LoginView(viewModel: viewModel)
+    }
+}
+
 struct ContentView: View {
     @EnvironmentObject var appState: AppState
     @StateObject private var projectAccessService = ProjectAccessService()
@@ -36,7 +49,8 @@ struct ContentView: View {
                     }
                 }
             } else {
-                LoginView(viewModel: LoginViewModel(appState: appState, projectAccessService: projectAccessService))
+                // Use the new ViewHolder to ensure correct ViewModel lifecycle
+                LoginViewHolder(appState: appState, projectAccessService: projectAccessService)
             }
         }
         .animation(.easeInOut, value: appState.currentUser)

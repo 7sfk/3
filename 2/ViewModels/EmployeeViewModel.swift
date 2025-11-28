@@ -3,7 +3,7 @@ import Combine
 
 final class EmployeeViewModel: ObservableObject {
     @Published var name: String = ""
-    @Published var role: EmployeeRole = .worker
+    @Published var role: UserRole = .worker
 
     func saveEmployee() {
         // Здесь будет логика сохранения нового сотрудника

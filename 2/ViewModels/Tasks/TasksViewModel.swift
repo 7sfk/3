@@ -2,9 +2,9 @@ import SwiftUI
 import Combine
 
 final class TasksViewModel: ObservableObject {
-    @Published var tasks: [Task] = [
-        Task(id: "1", title: "Подготовить площадку", completed: false, assignedTo: "1"),
-        Task(id: "2", title: "Закупить материалы", completed: true, assignedTo: "2"),
-        Task(id: "3", title: "Составить отчет", completed: false, assignedTo: "3")
+    @Published var tasks: [ProjectTask] = [
+        ProjectTask(id: "1", name: "Подготовить площадку", description: "", assignedTo: "1", projectId: "1", isCompleted: false, dueDate: Date()),
+        ProjectTask(id: "2", name: "Закупить материалы", description: "", assignedTo: "2", projectId: "1", isCompleted: true, dueDate: Date()),
+        ProjectTask(id: "3", name: "Составить отчет", description: "", assignedTo: "3", projectId: "1", isCompleted: false, dueDate: Date())
     ]
 }
