@@ -277,7 +277,7 @@ struct TimeTrackingView: View {
     }
     
     private var completedTasksCount: Int {
-        timeService.currentSession?.tasks.filter { $0.status == .completed }.count ?? 0
+        timeService.currentSession?.tasks.filter { $0.status == WorkActivityStatus.completed }.count ?? 0
     }
     
     private var totalHoursToday: Double {
@@ -286,7 +286,7 @@ struct TimeTrackingView: View {
             .reduce(0.0) { $0 + ($1.totalHours ) }
     }
     
-    private func statusColor(for status: TaskStatus) -> Color {
+    private func statusColor(for status: WorkActivityStatus) -> Color {
         switch status {
         case .new:
             return .gray

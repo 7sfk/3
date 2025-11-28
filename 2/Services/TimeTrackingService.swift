@@ -45,7 +45,7 @@ class TimeTrackingService: ObservableObject {
     func endWorkDay() {
         guard var current = currentTimeSheet else { return }
         current.checkOut = Date()
-        current.status = .completed
+        current.status = TimeSheetStatus.completed
         current.totalHours = calculateTotalHours(timeSheet: current)
         currentTimeSheet = current
         objectWillChange.send()
@@ -53,7 +53,7 @@ class TimeTrackingService: ObservableObject {
     
     func submitTimeSheet() {
         guard var current = currentTimeSheet else { return }
-        current.status = .submitted
+        current.status = TimeSheetStatus.submitted
         currentTimeSheet = current
         objectWillChange.send()
     }
