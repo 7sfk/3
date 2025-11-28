@@ -1,95 +1,107 @@
 import SwiftUI
 
 struct LoginView: View {
+    // The ViewModel contains all the logic and state for this view.
     @ObservedObject var viewModel: LoginViewModel
 
     var body: some View {
         NavigationView {
             VStack(spacing: 18) {
-                // Заголовок с иконкой
+                // Header with app icon and name
                 VStack(spacing: 8) {
-                    Image(systemName: "building.2")
+                    Image(systemName: "building.2.fill")
                         .font(.system(size: 50))
-                        .foregroundColor(.blue)
+                        .foregroundColor(.accentColor)
                     Text("CONSTRUCT AI")
                         .font(.system(size: 28, weight: .bold, design: .rounded))
-                    Text("Архитектурный помощник")
+                    Text("Ваш архитектурный помощник")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
                 .padding(.top, 40)
 
                 Text("Вход в систему")
-                    .font(.title3)
-                    .bold()
+                    .font(.title2).bold()
+                    .padding(.top)
 
-                // Поля ввода
+                // Input fields for username and password
                 VStack(spacing: 12) {
                     TextField("Имя пользователя", text: $viewModel.username)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .textContentType(.username)
                         .autocapitalization(.none)
 
                     SecureField("Пароль", text: $viewModel.password)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .textContentType(.password)
                 }
                 .padding(.horizontal)
 
-                // Выбор роли
+                // Role selection
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Роль:")
+                    Text("Выберите вашу роль:")
                         .font(.headline)
                     Picker("Роль", selection: $viewModel.selectedRole) {
-                        Text("Прораб").tag(UserRole.foreman)
-                        Text("Админ").tag(UserRole.admin)
-                        Text("Рабочий").tag(UserRole.worker)
-                        Text("Снабженец").tag(UserRole.supplier)
+                        ForEach(UserRole.allCases, id: \.self) { role in
+                            Text(role.rawValue.capitalized).tag(role)
+                        }
                     }
                     .pickerStyle(SegmentedPickerStyle())
                 }
                 .padding(.horizontal)
 
-                // Сообщение об ошибке
+                // Error message display
                 if !viewModel.errorMessage.isEmpty {
                     Text(viewModel.errorMessage)
                         .foregroundColor(.red)
                         .font(.caption)
+                        .multilineTextAlignment(.center)
                         .padding(.horizontal)
                 }
 
-                // Кнопка входа
-                Button(action: { 
-                    viewModel.login() 
-                }) {
+                // Login button with loading state
+                Button(action: viewModel.login) {
                     if viewModel.isLoading {
                         ProgressView()
                             .progressViewStyle(CircularProgressViewStyle(tint: .white))
                     } else {
                         Text("Войти")
                             .font(.headline)
+                            .fontWeight(.bold)
                     }
                 }
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(Color.blue)
+                .background(Color.accentColor)
                 .foregroundColor(.white)
                 .cornerRadius(10)
                 .padding(.horizontal)
                 .disabled(viewModel.isLoading)
 
-                // Демо подсказка
+                Spacer()
+                
+                // Demo helper text
                 VStack(spacing: 4) {
-                    Text("Для теста:")
+                    Text("Для демонстрации:")
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    Text("Любой логин, пароль от 3 символов")
+                    Text("Используйте любое имя и пароль.")
                         .font(.caption2)
                         .foregroundColor(.secondary)
                 }
-                .padding(.top)
-
-                Spacer()
+                .padding(.bottom)
             }
             .navigationBarHidden(true)
+            .background(Color(.systemGroupedBackground).edgesIgnoringSafeArea(.all))
         }
+    }
+}
+
+// This preview block helps visualize the LoginView in Xcode's canvas.
+struct LoginView_Previews: PreviewProvider {
+    static var previews: some View {
+        // We create a mock LoginViewModel for the preview.
+        let mockViewModel = LoginViewModel(appState: AppState())
+        return LoginView(viewModel: mockViewModel)
     }
 }

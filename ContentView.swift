@@ -30,7 +30,7 @@ struct ContentView: View {
                         onContinue: {
                             withAnimation(.easeInOut) {
                                 showMainApp = true
-                                // Загружаем данные после приветствия
+                                // Load data after the welcome screen
                                 projectAccessService.loadSampleData(for: appState.currentUserRole, user: currentUser)
                             }
                         }
@@ -57,9 +57,9 @@ struct ContentView: View {
         .animation(.easeInOut, value: appState.currentUser)
         .animation(.easeInOut, value: showWelcome)
         .animation(.easeInOut, value: showMainApp)
-        .alert(isPresented: $appState.notificationService.showAlert) { // Here is the change
+        .alert(isPresented: $appState.notificationService.showAlert) {
             Alert(
-                title: Text("Notification"),
+                title: Text(appState.notificationService.alertTitle ?? "Notification"),
                 message: Text(appState.notificationService.alertMessage ?? "An unknown error occurred."),
                 dismissButton: .default(Text("OK"))
             )
@@ -79,11 +79,11 @@ struct LoadingView: View {
                 .tint(roleColor)
             
             VStack(spacing: 8) {
-                Text("ИЗМЕНЕНИЯ ПРИМЕНЕНЫ! ПРАВИЛЬНАЯ ПАПКА!")
+                Text("Loading projects for user...")
                     .font(.headline)
                     .foregroundColor(.secondary)
                 
-                Text("для \(role.displayName)")
+                Text("for \(role.displayName)")
                     .font(.subheadline)
                     .foregroundColor(roleColor)
             }
@@ -100,5 +100,12 @@ struct LoadingView: View {
         case .worker: return .green
         case .inspector: return .purple
         }
+    }
+}
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+            .environmentObject(AppState()) // Provide a dummy AppState for preview
     }
 }
