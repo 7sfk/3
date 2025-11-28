@@ -1,7 +1,7 @@
 import Foundation
 import Combine
 
-class ForemanDashboardViewModel: ObservableObject {
+final class ForemanDashboardViewModel: ObservableObject {
     @Published var project: ProjectContainer
     @Published var assignedEmployees: [Employee] = []
     @Published var isLoading: Bool = false
@@ -14,7 +14,7 @@ class ForemanDashboardViewModel: ObservableObject {
     
     func fetchAssignedEmployees() {
         isLoading = true
-        firebaseService.fetchEmployees(forProject: project) { [weak self] employees in
+        firebaseService.fetchTeam(for: project.id) { [weak self] employees in
             DispatchQueue.main.async {
                 self?.assignedEmployees = employees
                 self?.isLoading = false

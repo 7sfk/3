@@ -16,7 +16,7 @@ final class WorkerDashboardViewModel: ObservableObject {
     
     func fetchTasks() {
         isLoading = true
-        firebaseService.fetchTasks(forProject: project.id, userId: userId) { [weak self] tasks in
+        firebaseService.fetchTasks(for: userId, projectId: project.id) { [weak self] tasks in
             DispatchQueue.main.async {
                 self?.tasks = tasks
                 self?.isLoading = false
